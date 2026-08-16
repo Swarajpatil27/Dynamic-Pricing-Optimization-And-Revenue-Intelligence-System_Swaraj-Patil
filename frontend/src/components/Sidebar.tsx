@@ -7,57 +7,60 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
+  const navLinks = [
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Products & Pricing', href: '/dashboard/products' },
+    { name: 'Price Prediction', href: '/dashboard/pricing-prediction' },
+    { name: 'Demand Forecast', href: '/dashboard/demand-forecast' },
+    { name: 'Competitors', href: '/dashboard/competitors' },
+  ];
+
   const handleSignOut = () => {
     localStorage.removeItem('token');
     router.push('/login');
   };
 
-  const navItems = [
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Products & Pricing', path: '/dashboard/products' },
-    { name: 'Demand Forecast', path: '/dashboard/forecast' },
-    { name: 'Competitors', path: '/dashboard/competitors' },
-  ];
-
   return (
-    <aside className="w-64 bg-slate-900 text-white h-full flex flex-col justify-between p-4 shrink-0">
-      <div className="space-y-6">
-        <div className="flex items-center space-x-3 px-2 pt-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg text-white">
+    <aside className="w-64 bg-slate-900 text-white min-h-screen flex flex-col justify-between p-4 border-r border-slate-800">
+      {/* Brand Logo Header */}
+      <div>
+        <div className="flex items-center gap-3 px-3 py-4 border-b border-slate-800 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white shadow-sm">
             P
           </div>
-          <span className="text-lg font-bold tracking-wide">PricePilot AI</span>
+          <span className="text-lg font-bold tracking-tight text-white">
+            PricePilot AI
+          </span>
         </div>
 
+        {/* Navigation Links */}
         <nav className="space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.path;
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
             return (
               <Link
-                key={item.path}
-                href={item.path}
-                className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                key={link.href}
+                href={link.href}
+                className={`flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-blue-600 text-white'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                    ? 'bg-blue-600 text-white font-semibold shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                {item.name}
+                {link.name}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="pt-4 border-t border-slate-800 pb-2">
+      {/* Footer Sign Out */}
+      <div className="pt-4 border-t border-slate-800">
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center space-x-2 px-3 py-2.5 rounded-lg text-sm font-medium text-rose-400 hover:bg-rose-950/40 hover:text-rose-300 transition-colors"
+          className="w-full text-left px-4 py-2 text-xs font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 rounded-lg transition-colors"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          <span>Sign Out</span>
+          Sign Out
         </button>
       </div>
     </aside>

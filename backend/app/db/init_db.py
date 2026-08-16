@@ -1,30 +1,46 @@
-import csv
-import os
-from sqlalchemy.orm import Session
+import httpx
+from app.db.database import Base, SessionLocal, engine
 from app.models.product import Product
 
-def init_db(db: Session):
-    # If database already has products, skip seeding
-    if db.query(Product).first():
-        return
 
-    csv_path = os.path.join(os.path.dirname(__file__), "..", "initial_products.csv")
-    if os.path.exists(csv_path):
-        with open(csv_path, mode="r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                product = Product(
-                    name=row["name"],
-                    category=row["category"],
-                    current_price=float(row["current_price"]),
-                    cost_price=float(row["cost_price"]),
-                    stock_level=int(row["stock_level"]),
-                    demand_trend=row["demand_trend"],
-                    units_sold=int(row["units_sold"]),
-                    historical_demand=int(row["historical_demand"]),
-                    seasonality_factor=float(row["seasonality_factor"]),
-                    competitor_price=float(row["competitor_price"]),
-                )
-                db.add(product)
-            db.commit()
-            print("INFO: Real-world retail dataset successfully loaded into SQLite database!")
+def init_db_with_real_ecommerce_data():
+  Base.metadata.create_all(bind=engine)
+  db = SessionLocal()
+
+  # Clean existing items
+  db.query(Product).delete()
+
+  response = httpx.get("https://dummyjson.com/products?limit=20")
+  if response.status_code == 200:
+    items = response.json().get("products", [])
+
+    for item in items:
+      cost = round(item["price"] * 0.6, 2)
+      comp_price = round(
+          item["price"] * (1 + (item.get("discountPercentage", 5) / 100)), 2
+      )
+
+      # Extract thumbnail image URL
+      image = item.get("thumbnail") or (
+          item.get("images")[0] if item.get("images") else None
+      )
+
+      product = Product(
+          name=item["title"],
+          sku=f"SKU-{item['id'] + 1000}",
+          category=item["category"].capitalize(),
+          current_price=float(item["price"]),
+          cost_price=cost,
+          competitor_price=comp_price,
+          stock_level=int(item["stock"]),
+          image_url=image,
+      )
+      db.add(product)
+
+    db.commit()
+    print("Successfully re-seeded DB with product images!")
+  db.close()
+
+
+if __name__ == "__main__":
+  init_db_with_real_ecommerce_data()

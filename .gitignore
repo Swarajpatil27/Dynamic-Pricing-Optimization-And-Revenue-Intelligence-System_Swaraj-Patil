@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Python virtual environment folders
+backend/Include/
+backend/Lib/
+backend/Scripts/
+
+# Database
+*.db
+
+# Next.js
+frontend/.next/
+frontend/node_modules/
+
+# Node
+node_modules/
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/

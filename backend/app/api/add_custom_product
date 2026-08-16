@@ -1,0 +1,37 @@
+@router.post("/add-product")
+def add_custom_product(product: CustomProductRequest):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    # Check table column names
+    cursor.execute("PRAGMA table_info(products)")
+    columns = [column[1] for column in cursor.fetchall()]
+
+    if not columns:
+        # Create table if it doesn't exist
+        cursor.execute(
+            """
+            CREATE TABLE products (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                category TEXT,
+                price REAL,
+                stock INTEGER
+            )
+            """
+        )
+        title_col = "title"
+    else:
+        # Use existing column name ('title' or 'name')
+        title_col = "title" if "title" in columns else "name"
+
+    # Insert using the detected column name
+    query = f"INSERT INTO products ({title_col}, category, price, stock) VALUES (?, ?, ?, ?)"
+    cursor.execute(
+        query,
+        (product.title, product.category, product.current_price, product.stock),
+    )
+
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": f"Product '{product.title}' added successfully!"}
