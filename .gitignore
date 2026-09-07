@@ -1,35 +1,124 @@
+# ============================================================
+# PricePilot AI - Root .gitignore
+# ============================================================
+
+
+# ------------------------------------------------------------
 # Python
+# ------------------------------------------------------------
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+
 venv/
 .venv/
+ENV/
+env/
 
+
+# ------------------------------------------------------------
 # Backend
-pricepilot-backend/venv/
-pricepilot-backend/__pycache__/
+# ------------------------------------------------------------
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
 
-# Database
+
+# ------------------------------------------------------------
+# SQLite Database
+# ------------------------------------------------------------
 *.db
+*.sqlite
+*.sqlite3
 
-# Next.js
-pricepilot-frontend/.next/
-pricepilot-frontend/node_modules/
-node_modules/
+# Keep database schema/seed files tracked
+!database/schema.sql
+!database/seed.sql
+!database/README.md
 
-# Environment files
+
+# ------------------------------------------------------------
+# Environment / Secrets
+# ------------------------------------------------------------
 .env
 .env.local
-.env.*
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
 
-# IDE
+*.env
+
+
+# ------------------------------------------------------------
+# Next.js / Frontend
+# ------------------------------------------------------------
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+node_modules/
+
+*.tsbuildinfo
+
+
+# ------------------------------------------------------------
+# Generated / Copied Frontend Files
+# ------------------------------------------------------------
+frontend/.next - Copy/
+frontend/next-env.d - Copy.ts
+
+
+# ------------------------------------------------------------
+# Git Backup
+# ------------------------------------------------------------
+frontend/.git-backup/
+
+
+# ------------------------------------------------------------
+# IDE / Editor
+# ------------------------------------------------------------
 .vscode/
 .idea/
 
-# Git backup
-pricepilot-frontend/.git-backup/
+*.swp
+*.swo
+.DS_Store
 
-# Next.js copied/generated files
-pricepilot-frontend/.next - Copy/
 
-# Copied generated environment file
-pricepilot-frontend/next-env.d - Copy.ts
+# ------------------------------------------------------------
+# Logs
+# ------------------------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+
+# ------------------------------------------------------------
+# OS Files
+# ------------------------------------------------------------
+Thumbs.db
+Desktop.ini
+
+
+# ------------------------------------------------------------
+# Build / Cache
+# ------------------------------------------------------------
+.cache/
+dist/
+coverage/
+.pytest_cache/
+
+
+# ------------------------------------------------------------
+# Temporary Files
+# ------------------------------------------------------------
+*.tmp
+*.temp
+*.bak
