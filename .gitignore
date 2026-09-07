@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Backend
+pricepilot-backend/venv/
+pricepilot-backend/__pycache__/
+
+# Database
+*.db
+
+# Next.js
+pricepilot-frontend/.next/
+pricepilot-frontend/node_modules/
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# Git backup
+pricepilot-frontend/.git-backup/
+
+# Next.js copied/generated files
+pricepilot-frontend/.next - Copy/
+
+# Copied generated environment file
+pricepilot-frontend/next-env.d - Copy.ts

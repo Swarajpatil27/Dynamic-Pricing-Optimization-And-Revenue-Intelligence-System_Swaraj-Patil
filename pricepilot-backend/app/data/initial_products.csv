@@ -1,0 +1,16 @@
+name,category,current_price,cost_price,stock_level,demand_trend,units_sold,historical_demand,seasonality_factor,competitor_price
+Wireless Noise-Canceling Headphones,Electronics,299.99,180.00,120,Increasing,1450,1200,1.25,319.99
+Ultra HD 4K Smart TV 55-inch,Electronics,499.00,340.00,45,Stable,890,850,1.10,489.00
+Mechanical Gaming Keyboard,Electronics,89.99,45.00,210,Increasing,2300,1950,1.15,94.99
+Ergonomic Mesh Office Chair,Furniture,199.50,110.00,60,Decreasing,420,580,0.85,189.99
+Stainless Steel Smart Water Bottle,Home & Kitchen,34.99,12.50,350,Increasing,3100,2400,1.30,39.99
+Running Performance Sneakers,Apparel,120.00,55.00,180,Stable,1120,1100,1.05,125.00
+Portable Bluetooth Speaker,Electronics,59.99,28.00,140,Increasing,1850,1600,1.20,54.99
+Smart Fitness Watch Tracker,Electronics,149.99,75.00,95,Increasing,1620,1350,1.18,159.99
+Organic Cotton Hoodie,Apparel,45.00,18.00,220,Stable,980,950,1.00,49.99
+Automatic Espresso Coffee Machine,Home & Kitchen,329.00,200.00,30,Decreasing,310,410,0.90,349.00
+Professional DSLR Camera,Electronics,899.00,620.00,25,Stable,180,175,1.02,879.00
+Smart Home Security Camera,Electronics,79.99,35.00,160,Increasing,1950,1500,1.22,84.99
+Minimalist Leather Wallet,Apparel,29.99,8.50,400,Stable,2500,2450,1.00,27.99
+Compact Air Purifier,Home & Kitchen,119.99,60.00,80,Increasing,1250,980,1.28,129.99
+Gaming Mouse Wireless RGB,Electronics,49.99,20.00,280,Increasing,2800,2100,1.15,52.99
