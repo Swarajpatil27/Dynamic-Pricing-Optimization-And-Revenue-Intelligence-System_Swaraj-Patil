@@ -16,7 +16,7 @@ The application database is named:
 
 The database connection is configured in:
 
-`pricepilot-backend/app/db/database.py`
+`backend/app/db/database.py`
 
 ## Directory Structure
 

@@ -18,10 +18,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Authentication Router
+try:
+    from app.api.auth import router as auth_router
+    app.include_router(auth_router)
+    print("Mounted Authentication API Router")
+except Exception as e:
+    print(f"Warning: Authentication router error: {e}")
+
+# Analytics Router
+try:
+    from app.api.analytics import router as analytics_router
+    app.include_router(analytics_router)
+    print("Mounted Analytics API Router")
+except Exception as e:
+    print(f"Warning: Analytics router error: {e}")
+
 # 1. Product Catalog & Search Router
 try:
-    from app.api.products import router as products_router, init_products_table
-    init_products_table()
+    from app.api.products import router as products_router
     app.include_router(products_router)
     print("Mounted Products & Catalog API Router")
 except Exception as e:
@@ -34,14 +49,6 @@ try:
     print("Mounted Competitor Intelligence API Router")
 except Exception as e:
     print(f"Warning: Competitors router error: {e}")
-
-# 3. Market Intelligence Router (Milestone 3 Tasks 3 & 4)
-try:
-    from app.api.intelligence import router as intelligence_router
-    app.include_router(intelligence_router)
-    print("Mounted Market Intelligence API Router")
-except Exception as e:
-    print(f"Warning: Intelligence router error: {e}")
 
 # 4. Revenue Optimization & Margin Simulator Router (Milestone 3 • Module 6)
 try:

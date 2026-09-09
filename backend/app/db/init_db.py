@@ -1,46 +1,87 @@
 import httpx
+
 from app.db.database import Base, SessionLocal, engine
 from app.models.product import Product
+from app.models.user import User
+from app.models.competitor import CompetitorPriceLog
 
 
 def init_db_with_real_ecommerce_data():
-  Base.metadata.create_all(bind=engine)
-  db = SessionLocal()
+    # Create all tables if they do not already exist.
+    # Importing the models above registers them with Base.metadata.
+    Base.metadata.create_all(bind=engine)
 
-  # Clean existing items
-  db.query(Product).delete()
+    db = SessionLocal()
 
-  response = httpx.get("https://dummyjson.com/products?limit=20")
-  if response.status_code == 200:
-    items = response.json().get("products", [])
+    try:
+        # Do not delete existing products.
+        # This makes the initialization process safe to run again.
+        existing_products = db.query(Product).count()
 
-    for item in items:
-      cost = round(item["price"] * 0.6, 2)
-      comp_price = round(
-          item["price"] * (1 + (item.get("discountPercentage", 5) / 100)), 2
-      )
+        if existing_products > 0:
+            print(
+                f"Database already contains {existing_products} product(s). "
+                "Skipping product seeding."
+            )
+            return
 
-      # Extract thumbnail image URL
-      image = item.get("thumbnail") or (
-          item.get("images")[0] if item.get("images") else None
-      )
+        print("No products found. Fetching sample e-commerce data...")
 
-      product = Product(
-          name=item["title"],
-          sku=f"SKU-{item['id'] + 1000}",
-          category=item["category"].capitalize(),
-          current_price=float(item["price"]),
-          cost_price=cost,
-          competitor_price=comp_price,
-          stock_level=int(item["stock"]),
-          image_url=image,
-      )
-      db.add(product)
+        response = httpx.get(
+            "https://dummyjson.com/products?limit=20",
+            timeout=15.0,
+        )
+        response.raise_for_status()
 
-    db.commit()
-    print("Successfully re-seeded DB with product images!")
-  db.close()
+        items = response.json().get("products", [])
+
+        if not items:
+            print("No products were returned from the data source.")
+            return
+
+        for item in items:
+            cost = round(item["price"] * 0.6, 2)
+
+            comp_price = round(
+                item["price"]
+                * (1 + (item.get("discountPercentage", 5) / 100)),
+                2,
+            )
+
+            image = item.get("thumbnail")
+
+            if not image and item.get("images"):
+                image = item["images"][0]
+
+            product = Product(
+                name=item["title"],
+                sku=f"SKU-{item['id'] + 1000}",
+                category=item["category"].capitalize(),
+                cost_price=cost,
+                current_price=float(item["price"]),
+                selling_price=float(item["price"]),
+                competitor_price=comp_price,
+                stock_level=int(item["stock"]),
+                image_url=image,
+            )
+
+            db.add(product)
+
+        db.commit()
+
+        print(f"Successfully seeded {len(items)} product(s).")
+
+    except httpx.HTTPError as e:
+        db.rollback()
+        print(f"Unable to fetch sample product data: {e}")
+
+    except Exception as e:
+        db.rollback()
+        print(f"Database initialization error: {e}")
+
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
-  init_db_with_real_ecommerce_data()
+    init_db_with_real_ecommerce_data()
